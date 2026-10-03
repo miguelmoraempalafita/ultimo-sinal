@@ -1,0 +1,29 @@
+name: Criar APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Preparar projeto
+        run: |
+          mkdir game
+          unzip -q UltimoSinal_Projeto_para_APK.zip -d game
+
+      - name: Compilar APK
+        uses: dulvui/godot-android-export@v4
+        with:
+          godot-version: 4.3.3
+          working-directory: game
+
+      - name: Disponibilizar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: UltimoSinal-APK
+          path: game/build/UltimoSinal.apk
